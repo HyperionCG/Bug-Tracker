@@ -3,7 +3,15 @@ from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
+class MyUser(AbstractUser):
+    pass
+
 class Ticket(models.Model):
+    New = 'New'
+    In_Progress = 'In Progress'
+    Invalid = 'Invalid'
+    Done = 'Done'
+
     title = models.CharField(max_length=50)
     time = models.DateTimeField(default=timezone.now)
     description = models.CharField(max_length=200)
@@ -30,7 +38,7 @@ class Ticket(models.Model):
     )
     STATUS_CHOICES = [
       (New, 'New'),
-      (In Progress, 'In Progress'),
+      (In_Progress, 'In Progress'),
       (Done, 'Done'),
       (Invalid, 'Invalid'),  
     ]
@@ -41,6 +49,3 @@ class Ticket(models.Model):
 
     def __str__(self):
         return self.title
-
-class MyUser(AbstractUser):
-    display_name = models.CharField(max_length=50, null=True, blank=True)

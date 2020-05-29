@@ -4,11 +4,22 @@ from django.contrib.auth.decorators import login_required
 
 from bug_app.models import Ticket, MyUser
 from bug_app.forms import TicketForm, LoginForm, SignUpForm
-
+from bug_project import settings
 # Create your views here.
+
 def index(request):
-    data = Ticket.objects.all()
-    return render(request, 'index.html', {'data': data})
+    new_tickets = Ticket.objects.filter(status="New")
+    tickets_in_progress =  Ticket.objects.filter(status="In Progress")
+    invalid_tickets =  Ticket.objects.filter(status="Invalid")
+    done_tickets =  Ticket.objects.filter(status="Done")
+    return render(
+        request, 'index.html',
+         {
+             'new_tickets': new_tickets, 
+             'tickets_in_progress': tickets_in_progress, 
+             'invalid_tickets': invalid_tickets, 
+             'done_tickets': done_tickets
+             })
 
 def loginview(request):
     if request.method == "POST":
@@ -23,7 +34,7 @@ def loginview(request):
                     request.GET.get('next', reverse('homepage'))
                 )
     form = LoginForm()
-    return render(request, 'userpage.html', {'form':form})
+    return render(request, 'generic_form.html', {'form':form})
 
 def logoutview(request):
     logout(request)
@@ -55,9 +66,67 @@ def signupview(request):
             user = MyUser.objects.create_user(
                 username=data['username'],
                 password=data['password'],
-                display_name=data['display_name']
                 )
             return HttpResponseRedirect(reverse('homepage'))
     
     form = SignUpForm()
-    return render(request, 'userpage.html', {'form':form})
+    return render(request, 'generic_form.html', {'form':form})
+
+def add_ticket(request):
+    html = "generic_form.html"
+    
+    if request.method == "POST":
+        form = (request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            TicketForm.objects.create(
+                title=data['title'],
+                author=data['author'],
+                description=data['description'],
+            )
+            return HttpResponseRedirect(reverse('homepage'))
+    
+    form = TicketForm()
+    return render(request, html, {"form": form})
+
+def user_view(request, id):
+    user = MyUser.objects.get(id=id)
+    filed = Ticket.objects.filter()
+    assigned = Ticket.objects.filter()
+    completed = Ticket.objects.filter()
+    return render(request,'user_detail.html', 
+    {'user': user, 
+     'filed': filed, 
+     'assigned': assigned, 
+     'completed': completed })
+
+
+def ticket_detail_view(request, id):
+    tickets = Ticket.objects.get(id=id)
+    return render(request, 'ticket_detail.html', {'ticket': ticket})
+
+def assigning_ticket_view(request, id):
+    ticket = Ticket.objects.get(id=id)
+    ticket.status = 'In Progress'
+    ticket.assigned = request.user
+    ticket.completed = None
+    ticket.save()
+    return HttpResponseRedirect(reverse('ticket_detail.html', args=(id)))
+
+
+def completed_ticket_view(request, id):
+    ticket = Ticket.objects.get(id=id)
+    ticket.status = 'Done'
+    ticket.assigned = None
+    ticket.completed = request.user
+    ticket.save()
+    return HttpResponseRedirect(reverse('ticket_detail.html', args=(id)))
+
+
+def invalid_ticket_view(request, id):
+    ticket = Ticket.objects.get(id=id)
+    ticket.status = 'Invalid'
+    ticket.assigned = None
+    ticket.completed = None
+    ticket.save()
+    return HttpResponseRedirect(reverse('ticket_detail.html', args=(id)))
