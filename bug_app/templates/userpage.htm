@@ -1,0 +1,29 @@
+<h1>{{user}}'s Tickets</h1>
+<h3>Filed</h3>
+<ul>
+    {% for data in filed %}
+    <li>
+        <a href="/ticket_detail/{{data.id}}">{{data.title}}</a>
+    </li>
+    <br>
+    {% endfor %}
+</ul>
+<h3>Assigned</h3>
+    <ul>
+        {% for data in assigned_user %}
+        <li>
+            <a href="/ticket_detail/{{data.id}}">{{data.title}}</a>
+        </li>
+        <br>
+        {% endfor %}
+    </ul>
+<h3>Completed</h3>
+        <ul>
+            {% for data in completed_user %}
+            <li>
+                <a href="/ticket_detail/{{data.id}}">{{data.title}}</a>
+            </li>
+            <br>
+            {% endfor %}
+        </ul>
+<a href="/">Home</a>

@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractUser
 class MyUser(AbstractUser):
     pass
 
+
 class Ticket(models.Model):
     New = 'New'
     In_Progress = 'In Progress'

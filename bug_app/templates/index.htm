@@ -1,0 +1,81 @@
+<h1>Bug Tracker</h1>
+
+{%if request.user.is_authenticated %}
+You are logged in as {{ request.user.username }}
+{%endif%}
+{%if not request.user.is_authenticated %}
+Please Login <br>
+To Login <a href="login/">Click Here</a> <p></p>
+{%endif%}
+{%if request.user.is_authenticated %}<br>
+To Logout <a href="logout/">Click Here</a>
+{%endif%}
+
+{%if request.user.is_authenticated %}<br>
+Profile <a href="user/">CLick</a>
+{%endif%}
+<h2>New Tickets</h2>
+
+<ul>
+    {% for data in new_tickets %}
+    <li>
+        <a href="/ticket_detail/{{ data.id }}">{{ data.title }}</a>
+        <li>Time: {{ data.time }}</li>
+        <li>Description: {{ data.description }}</li>
+        <li>Status: {{ data.status }}</li>
+        <li>User Assigned: <a href="/user/{{data.assigned.id}}">{{data.assigned}}</a> </li>
+        <li>User who Completed: <a href="/user/{{data.completed.id}}">{{data.completed}}</a></li>
+    </li>
+    <br>
+    {% endfor %}
+</ul>
+
+<h2>Tickets in Progress:</h2>
+<ul>
+    {% for data in tickets_in_progress %}
+    <li>
+        <a href="/ticket_detail/{{ data.id }}">{{ data.title }}</a>
+        <li>Time: {{ data.time }}</li>
+        <li>Description: {{ data.description }}</li>
+        <li>Status: {{ data.status }}</li>
+        <li>User Assigned: <a href="/user/{{data.assigned.id}}">{{data.assigned}}</a></li>
+        <li>User who Completed: <a href="/user/{{data.completed.id}}">{{data.completed}}</a></li>
+    </li>
+    <br>
+    {% endfor %}
+</ul>
+<h2>Done Tickets:</h2>
+<ul>
+    {% for data in done_tickets %}
+    <li>
+        <a href="/ticket_detail/{{ data.id }}">{{ data.title }}</a>
+        <li>Time: {{ data.time }}</li>
+        <li>Description: {{ data.description }}</li>
+        <li>Status: {{ data.status }}</li>
+        <li>User Assigned: <a href="/user/{{data.assigned.id}}">{{data.assigned}}</a></li>
+        <li>User who Completed: <a href="/user/{{data.completed.id}}">{{data.completed}}</a></li>
+    </li>
+    <br>
+    {% endfor %}
+</ul>
+<h2>Invalid Tickets:</h2>
+<ul>
+    {% for data in invalid_tickets %}
+    <li>
+        
+        <a href="/ticket_detail/{{ data.id }}">{{ data.title }}</a>
+        <li>Time: {{ data.time }}</li>
+        <li>Description: {{ data.description }}</li>
+        <li>Status: {{ data.status }}</li>
+        <li>User Assigned: <a href="/user/{{data.assigned.id}}">{{data.assigned}}</a></li>
+        <li>User who Completed: <a href="/user/{{data.completed.id}}">{{data.completed}}</a></li>
+    </li>
+    <br>
+    {% endfor %}
+</ul>
+
+<a href="/add_ticket/">Add Ticket</a>
+<a href="/">Home</a>
+<a href=""></a>
+<a href=""></a>
+<a href=""></a>

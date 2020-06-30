@@ -1,15 +1,20 @@
-<form action="" method="post">
-    {%csrf_token%}
-    {{ form.as_p }}
-    <input type="submit" value="Submit!">
-</form>
 {%if request.user.is_authenticated %}
 You are logged in as {{ request.user.username }}
 {%endif%}
 {%if not request.user.is_authenticated %}
 Please Login <br>
 To Login <a href="login/">Click Here</a> <p></p>
+or Sign Up here <a href="/signup/">Click Here</a>
 {%endif%}
 {%if request.user.is_authenticated %}<br>
 To Logout <a href="logout/">Click Here</a>
 {%endif%}
+
+{%if request.user.is_authenticated %}<br>
+{%endif%}
+
+<form action="" method="post">
+    {%csrf_token%}
+    {{ form.as_p }}
+    <input type="submit" value="Submit!">
+</form>

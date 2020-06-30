@@ -20,5 +20,7 @@ class EditTicketForm(forms.ModelForm):
         fields = [
             'title',
             'description',
-            'status'
+            'status',
+            'assigned',
+            'completed',
         ]
